@@ -1,0 +1,16 @@
+from gtts import gTTS           #google_text_to_speech librarry
+import os                         #برای اجرای دستورات سیستم
+
+
+text = "hellow world.."
+language = "en"
+
+obj = gTTS(text=text, lang=language, slow=False)           #text: متنی که می‌خواهیم تبدیل به صوت کنیم.
+                                                           #lang: زبان متن.
+                                                           #slow: یک پارامتر اختیاری که مشخص می‌کند آیا صوت به صورت کند پخش شود یا نه.
+
+
+obj.save("welcome.mp3")
+os.system("mpg321 welcome.mp3")         #mpg321: برای پخش کردن فایل درپخش کننده سیستم
+                                              #بسته به نوع سیستم عامل امکان دارد متفاوت باشد
+                                               #os.system: اجرای دستورات سیستم

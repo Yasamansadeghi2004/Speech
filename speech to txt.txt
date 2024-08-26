@@ -1,0 +1,44 @@
+import speech_recognition as sr
+from colorama import init, Fore    #برای افزودن رنگ به متن در خروجی خط فرمان
+from termcolor import colored       #تعیین رنگ در خط فرمان
+from translate import Translator
+import pyttsx3                       #تبدیل متن به صدا
+
+
+def online_speech_to_text():
+    recognizer = sr.Recognizer()
+    engine = pyttsx3.init()
+    init(autoreset=True)  # مجوز استفاده از رنگها در خط فرمان
+
+    with sr.Microphone() as source:
+
+        print("Be silent...")
+        recognizer.adjust_for_ambient_noise(source)         #حذف نویزهای اطراف
+        print("Now speak :")
+        audio = recognizer.listen(source, timeout=5)
+
+    try:
+        text = recognizer.recognize_google(audio, language="fa-IR")          #دریافت صدا
+
+        def translate(Text, source_language='fa-IR', target_language='en'):        #ترجمه صدای دریافتی از فارسی به انگلیسی
+            translator = Translator(from_lang=source_language, to_lang=target_language)
+            translation = translator.translate(Text)
+            return translation
+
+        persian_text = text
+        english_translate = translate(persian_text)
+        print(colored(Fore.GREEN + f"You seid: {text} "))
+        print(colored(Fore.BLUE + f"English translate: {english_translate}"))
+        engine.say(text)              #تشخیص متن
+        engine.runAndWait()           #تبدیل به صدا
+    except sr.UnknownValueError:
+        print(colored(Fore.RED + "I did not understand, repeat again"))
+    except sr.RequestError as e:
+        print(colored(Fore.RED + "Detection error,  check your internet connection"))
+
+# فراخوانی تابع برای دریافت صدا
+
+
+online_speech_to_text()
+
+
